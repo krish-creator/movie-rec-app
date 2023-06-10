@@ -1,0 +1,49 @@
+.nav{
+    background: linear-gradient(0.25turn,#e66465, #9198e5);
+    /* box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.534); */
+}
+
+.nav-logo{
+    height: 50px;
+    width: auto;
+}
+
+.nav-title{
+    margin-right: auto;
+    margin-left: 15px;
+    font-weight: 700;
+    font-family: 'Karla', sans-serif;
+}
+
+
+.nav-search{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-input{
+    font-family: 'Karla', sans-serif;
+    border-radius: 25px;
+    border: none;
+    text-indent: 8px;
+}
+
+.search-btn{
+    height: 25px;
+}
+
+#login-btn, #signup-btn {
+    font-family: 'Karla', sans-serif;
+    font-weight: 400;
+    border: none;
+}
+
+#login-btn:active, #signup-btn:active {
+    position: relative;
+    top: 1px;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background: linear-gradient(0.25turn,#e66465, #9198e5);
+}
