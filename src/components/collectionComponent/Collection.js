@@ -8,20 +8,25 @@ import { Container, Row } from "reactstrap";
 import CollectionFooter from "../collectionFooterComponent/CollectionFooter";
 
 
-
 const Collection = (props) => {
 
     const [config, setConfig] = useState(null)
     const [collection, setCollection] = useState(null)
+    const [currentPage, setCurrentPage] = useState("1")
+
+    const changePage = (page) => {
+        setCurrentPage(page)
+    }
 
     useEffect(() => {
         apiReference(apiUrls.config).then((data) => setConfig(data))
     }, [])
 
     useEffect(() => {
-        apiReference(props.collectionUrl).then((data) => setCollection(data))
-    }, [props.collectionUrl])
+        apiReference(props.collectionUrl, currentPage).then((data) => setCollection(data))
+    }, [props.collectionUrl, currentPage])
 
+    const totalPages = collection ? collection.total_pages : null
     const imageBaseUrl = config ? config.images.base_url : null
     const collectionResult = collection ? collection.results : null
     const collectionMovies = collectionResult
@@ -49,7 +54,7 @@ const Collection = (props) => {
                     {galleryEl}
                 </Row>
             </Container>
-            <CollectionFooter />
+            <CollectionFooter totalPages="5" changePage={changePage} currentPage={currentPage} />
         </>
 
 

@@ -16,10 +16,22 @@ const App = () => {
         <Route path='/' element={<Main />} />
         <Route path='login' element={<Login />} />
         <Route path='register' element={<Login />} />
-        <Route path='popular' element={<Collection collectionUrl={apiUrls.popularMovies} />} />
-        <Route path='now-playing' element={<Collection collectionUrl={apiUrls.nowPlayingMovies} />} />
-        <Route path='upcoming' element={<Collection collectionUrl={apiUrls.upcomingMovies} />} />
-        <Route path='top-rated' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
+        <Route path='popular' element={<Collection collectionUrl={apiUrls.popularMovies} />} >
+          <Route index element={<Collection collectionUrl={apiUrls.popularMovies} />} />
+          <Route path=':page' element={<Collection collectionUrl={apiUrls.popularMovies} />} />
+        </Route>
+        <Route path='now-playing' element={<Collection collectionUrl={apiUrls.nowPlayingMovies} />} >
+          <Route index element={<Collection collectionUrl={apiUrls.nowPlayingMovies} />} />
+          <Route path=':page' element={<Collection collectionUrl={apiUrls.nowPlayingMovies} />} />
+        </Route>
+        <Route path='upcoming' element={<Collection collectionUrl={apiUrls.upcomingMovies} />} >
+          <Route index element={<Collection collectionUrl={apiUrls.upcomingMovies} />} />
+          <Route path=':page' element={<Collection collectionUrl={apiUrls.upcomingMovies} />} />
+        </Route>
+        <Route path='top-rated' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} >
+          <Route index element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
+          <Route path=':page' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
+        </Route>
         <Route path='*' element={<NoMatch />} />
       </Routes>
     </>

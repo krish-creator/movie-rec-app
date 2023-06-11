@@ -1,9 +1,9 @@
 {
     "baseUrl" : "https://api.themoviedb.org/3",
     "config" : "/configuration",
-    "trendingMovies" : "/trending/movie/day?language=en-US",
-    "nowPlayingMovies" : "/movie/now_playing?language=en-US&page=1",
-    "topRatedMovies" : "/movie/top_rated?language=en-US&page=1",
-    "popularMovies" : "/movie/popular?language=en-US&page=1",
-    "upcomingMovies" : "/movie/upcoming?language=en-US&page=1"
+    "trendingMovies" : "/trending/movie/day",
+    "nowPlayingMovies" : "/movie/now_playing",
+    "topRatedMovies" : "/movie/top_rated",
+    "popularMovies" : "/movie/popular",
+    "upcomingMovies" : "/movie/upcoming"
 }
