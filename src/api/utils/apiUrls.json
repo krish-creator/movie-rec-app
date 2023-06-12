@@ -1,9 +1,11 @@
 {
     "baseUrl" : "https://api.themoviedb.org/3",
-    "config" : "/configuration",
-    "trendingMovies" : "/trending/movie/day",
-    "nowPlayingMovies" : "/movie/now_playing",
-    "topRatedMovies" : "/movie/top_rated",
-    "popularMovies" : "/movie/popular",
-    "upcomingMovies" : "/movie/upcoming"
+    "config" : "/configuration?",
+    "trendingMovies" : "/trending/movie/day?",
+    "nowPlayingMovies" : "/movie/now_playing?",
+    "topRatedMovies" : "/movie/top_rated?",
+    "popularMovies" : "/movie/popular?",
+    "upcomingMovies" : "/movie/upcoming?",
+    "searchMovies" : "/search/movie?query=",
+    "movieOverview" : "/movie/"
 }

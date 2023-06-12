@@ -1,11 +1,14 @@
 import apiUrls from '../../api/utils/apiUrls.json'
 
-const apiReference = async (serviceUrl, currentPage) => {
+const apiReference = async (serviceUrl, currentPage, searchKey) => {
 
     const baseUrl = apiUrls.baseUrl
-    const language = `?language=en-US`
+    const language = `language=en-US`
+    const adult = `&include_adult=false`
     const pageUrl = `&page=${currentPage ? currentPage : 1}`
-    const url = baseUrl + serviceUrl + language + pageUrl
+    const query = searchKey ? searchKey : ''
+    const url = baseUrl + serviceUrl + query + adult + language + pageUrl
+
     const options = {
         method: 'GET',
         headers: {

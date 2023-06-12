@@ -1,32 +1,37 @@
 import Gallery from "../galleryComponent/Gallery"
 import { useEffect, useState } from "react"
 import apiUrls from '../../api/utils/apiUrls.json'
-import apiReference from '../../api/services/apiReference';
-import formatDate from '../../utils/formatDate';
-import formatUrl from '../../utils/fromatUrl';
-import { Container, Row } from "reactstrap";
-import CollectionFooter from "../collectionFooterComponent/CollectionFooter";
+import apiReference from '../../api/services/apiReference'
+import formatDate from '../../utils/formatDate'
+import formatUrl from '../../utils/fromatUrl'
+import { Container, Row } from "reactstrap"
+import CollectionFooter from "../collectionFooterComponent/CollectionFooter"
+import { useParams, useSearchParams } from "react-router-dom"
 
 
 const Collection = (props) => {
 
+    const params = useParams()
+    const pageNo = params.page ? params.page : '1'
+
+    const [searchParams] = useSearchParams()
     const [config, setConfig] = useState(null)
     const [collection, setCollection] = useState(null)
-    const [currentPage, setCurrentPage] = useState("1")
+    const [searchKey, setSearchKey] = useState(null)
 
-    const changePage = (page) => {
-        setCurrentPage(page)
-    }
+    useEffect(() => {
+        setSearchKey(searchParams.get('query'))
+    }, [searchParams])
 
     useEffect(() => {
         apiReference(apiUrls.config).then((data) => setConfig(data))
     }, [])
 
     useEffect(() => {
-        apiReference(props.collectionUrl, currentPage).then((data) => setCollection(data))
-    }, [props.collectionUrl, currentPage])
+        apiReference(props.collectionUrl, pageNo, searchKey).then((data) => setCollection(data))
+    }, [props.collectionUrl, pageNo, searchKey])
 
-    const totalPages = collection ? collection.total_pages : null
+    // const totalPages = collection ? collection.total_pages : null
     const imageBaseUrl = config ? config.images.base_url : null
     const collectionResult = collection ? collection.results : null
     const collectionMovies = collectionResult
@@ -54,7 +59,7 @@ const Collection = (props) => {
                     {galleryEl}
                 </Row>
             </Container>
-            <CollectionFooter totalPages="5" changePage={changePage} currentPage={currentPage} />
+            <CollectionFooter totalPages="5" currentPage={pageNo} />
         </>
 
 

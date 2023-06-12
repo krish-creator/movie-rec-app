@@ -3,14 +3,21 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper";
+import { useNavigate } from 'react-router-dom';
 
 const Card = (props) => {
+
+    const navigate = useNavigate()
+
+    const handleOverview = (movieId) => {
+        navigate(`/overview?movieId=${movieId}`);
+    };
 
     const movieCardEl = props.movieResult
         ? props.movieResult.map(movie => {
             return (
-                <SwiperSlide key={movie.id}>
-                    <div className="card p-0 m-2 movie-card" >
+                <SwiperSlide key={movie.id} id={movie.id}>
+                    <div className="card p-0 m-2 movie-card" onClick={() => handleOverview(movie.id)}>
                         <img src={movie.backdrop_path} className="card-img-top p-0" alt="card-poster" />
                         <div className="card-body">
                             <h5 className="card-title fw-bold fs-6 fs-md-4">{movie.title}</h5>
