@@ -1,6 +1,6 @@
 .nav{
     background: linear-gradient(0.25turn,#e66465, #9198e5);
-    /* box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.534); */
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.315);
 }
 
 .nav-logo{
@@ -33,13 +33,13 @@
     height: 25px;
 }
 
-#login-btn, #signup-btn {
+#login-btn, #signup-btn,#profile-btn {
     font-family: 'Karla', sans-serif;
     font-weight: 400;
     border: none;
 }
 
-#login-btn:active, #signup-btn:active {
+#login-btn:active, #signup-btn:active, #profile-btn:active {
     position: relative;
     top: 1px;
 }

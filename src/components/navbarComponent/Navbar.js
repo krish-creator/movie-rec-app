@@ -3,9 +3,11 @@ import logo from '../../assets/clapperboard.png'
 import searchIcon from '../../assets/search.png'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import { useAuth } from '../../utils/auth'
 
 
 const Navbar = () => {
+    const auth = useAuth()
     const navigate = useNavigate()
     const [keyWord, setKeyWord] = useState("")
 
@@ -47,8 +49,14 @@ const Navbar = () => {
                             <input className="form-control me-2 search-input" onChange={(e) => handleChange(e)} type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn" type="submit" onClick={handleSearch}><img src={searchIcon} alt="search-icon" className='search-btn' /></button>
                         </div>
-                        <button type="button" className="btn" id='login-btn' onClick={() => { navigate('login') }}>Login</button>
-                        <button type="button" className="btn" id='signup-btn' onClick={() => { navigate('register') }}>Register</button>
+                        <button type="button" className="btn" id='profile-btn' onClick={() => { navigate('/profile') }}>Profile</button>
+                        {!auth.user && (
+                            <>
+                                <button type="button" className="btn" id='login-btn' onClick={() => { navigate('/login') }}>Login</button>
+                                <button type="button" className="btn" id='signup-btn' onClick={() => { navigate('/register') }}>Register</button>
+                            </>
+                        )}
+
                     </div>
                 </div>
             </nav >

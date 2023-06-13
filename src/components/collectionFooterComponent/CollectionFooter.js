@@ -44,7 +44,7 @@ const CollectionFooter = (props) => {
     const firstPageDisabled = props.currentPage === firstPage ? 'disabled' : {}
 
     return (
-        <Pagination size='lg' className="d-flex justify-content-center mb-3 " >
+        <Pagination size='md' className="d-flex justify-content-center mb-3 " >
 
             <PaginationItem>
                 <NavLink to={firstPage} className={`page-no ${firstPageDisabled}`} >

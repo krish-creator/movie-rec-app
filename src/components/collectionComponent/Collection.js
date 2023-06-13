@@ -47,7 +47,7 @@ const Collection = (props) => {
     const galleryEl = collectionMovies
         ? collectionMovies.map(card => {
             return (
-                card && <Gallery key={card.id} imageUrl={card.backdrop_path} cardTitle={card.title} cardSubtitle={card.release_date} />
+                card && <Gallery key={card.id} movieId={card.id} imageUrl={card.backdrop_path} cardTitle={card.title} cardSubtitle={card.release_date} />
             )
         })
         : null
