@@ -9,6 +9,8 @@ const apiReference = async (serviceUrl, currentPage, searchKey) => {
     const query = searchKey ? searchKey : ''
     const url = baseUrl + serviceUrl + query + adult + language + pageUrl
 
+    console.log(url);
+
     const options = {
         method: 'GET',
         headers: {
