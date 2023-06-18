@@ -23,8 +23,8 @@ const App = () => {
             <LazyMain />
           </React.Suspense>
         } />
-        <Route path='login' element={<Login />} />
-        <Route path='register' element={<Login />} />
+        <Route path='login' element={<Login btnLabel="Login" />} />
+        <Route path='register' element={<Login btnLabel="Register" />} />
         <Route path='popular' element={<Collection collectionUrl={apiUrls.popularMovies} />} >
           <Route index element={<Collection collectionUrl={apiUrls.popularMovies} />} />
           <Route path=':page' element={<Collection collectionUrl={apiUrls.popularMovies} />} />

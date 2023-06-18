@@ -69,10 +69,10 @@ const Main = () => {
 
 
     const cards = [
+        { id: 0, title: "Recommended", apiResult: null },
         { id: 1, title: "Trending", apiResult: trendingMovies },
         { id: 2, title: "Now Playing", apiResult: nowPlayingMovies },
         { id: 3, title: "Top Rated", apiResult: topRatedMovies },
-
     ]
 
     const cardsEl = cards.map(card => {

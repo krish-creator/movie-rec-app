@@ -7,5 +7,7 @@
     "popularMovies" : "/movie/popular?",
     "upcomingMovies" : "/movie/upcoming?",
     "searchMovies" : "/search/movie?query=",
-    "movieOverview" : "/movie/"
+    "movieOverview" : "/movie/",
+    "movieGenres" : "/genre/movie/list?",
+    "preferredMovies" : "/discover/movie?"
 }

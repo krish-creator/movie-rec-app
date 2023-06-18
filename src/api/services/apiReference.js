@@ -4,12 +4,9 @@ const apiReference = async (serviceUrl, currentPage, searchKey) => {
 
     const baseUrl = apiUrls.baseUrl
     const language = `language=en-US`
-    const adult = `&include_adult=false`
     const pageUrl = `&page=${currentPage ? currentPage : 1}`
     const query = searchKey ? searchKey : ''
-    const url = baseUrl + serviceUrl + query + adult + language + pageUrl
-
-    console.log(url);
+    const url = baseUrl + serviceUrl + query + language + pageUrl
 
     const options = {
         method: 'GET',

@@ -1,6 +1,7 @@
 .container{
     gap: 2rem;
     font-family: 'Karla';
+    height: 100%;
 }
 
 .title{
@@ -20,15 +21,4 @@
 
 .btn-logout{
     width: 100px;
-}
-
-.custom-check-group{
-    gap: 10px;
-}
-
-.custom-check{
-    display: flex;
-    justify-content: space-between;
-    gap: 5rem;
-    font-size: 1.4rem;
 }

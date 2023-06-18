@@ -1,0 +1,15 @@
+
+.custom-check-group{
+    gap: 10px;
+}
+
+.custom-check{
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
+}
+
+.form-check-input:checked {
+    background-color: #e66465;
+    border:  #9198e5;
+}

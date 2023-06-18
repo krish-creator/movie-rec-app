@@ -10,7 +10,7 @@ import './Login.css'
 import { useAuth } from '../../utils/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const Login = () => {
+const Login = (props) => {
 
     const [user, setUser] = useState('')
     const auth = useAuth()
@@ -39,7 +39,7 @@ const Login = () => {
                         <Form.Control type="password" placeholder="Password" className='password' />
                     </FloatingLabel>
                     <Button variant="primary" type="submit" className='mt-3' onClick={handleLogin}>
-                        Login
+                        {props.btnLabel}
                     </Button>
                 </Col>
             </Row>
