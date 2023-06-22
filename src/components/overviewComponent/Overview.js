@@ -26,8 +26,8 @@ const Overview = (props) => {
     }, [])
 
     useEffect(() => {
-        apiReference(props.overviewUrl, pageNo, movieId).then((data) => setOverview(data))
-    }, [props.overviewUrl, pageNo, movieId])
+        apiReference(props.overviewUrl, movieId, pageNo).then((data) => setOverview(data))
+    }, [props.overviewUrl, movieId, pageNo])
 
     // const totalPages = overview ? overview.total_pages : null
     const imageBaseUrl = config ? config.images.base_url : null

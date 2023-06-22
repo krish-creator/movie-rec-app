@@ -9,5 +9,5 @@
     "searchMovies" : "/search/movie?query=",
     "movieOverview" : "/movie/",
     "movieGenres" : "/genre/movie/list?",
-    "preferredMovies" : "/discover/movie?"
+    "preferredMovies" : "/discover/movie?&sort_by=popularity.desc&with_genres="
 }

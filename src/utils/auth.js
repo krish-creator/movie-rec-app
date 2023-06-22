@@ -4,18 +4,30 @@ const AuthContext = createContext(null)
 
 export const AuthProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null)
+    const currentUser = JSON.parse(localStorage.getItem("userName"))
+
+    const [user, setUser] = useState(currentUser || null)
 
     const login = (user) => {
         setUser(user)
+        localStorage.setItem("userName", JSON.stringify(user))
     }
 
     const logout = () => {
         setUser(null)
+        localStorage.removeItem("userName")
+    }
+
+    const authValue = {
+        user,
+        login,
+        logout,
     }
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={authValue}>
+            {children}
+        </AuthContext.Provider>
     )
 }
 

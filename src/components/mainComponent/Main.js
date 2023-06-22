@@ -9,12 +9,15 @@ import formatDate from '../../utils/formatDate';
 import formatUrl from '../../utils/fromatUrl';
 
 
-const Main = () => {
+const Main = (props) => {
 
     const [config, setConfig] = useState(null)
     const [trending, setTrending] = useState(null)
     const [nowPlaying, setNowPlaying] = useState(null)
     const [topRated, setTopRated] = useState(null)
+    const [userRecommedations, setUserRecommedations] = useState(null)
+
+    const preference = props?.preference
 
     useEffect(() => {
         apiReference(apiUrls.config).then((data) => setConfig(data))
@@ -32,7 +35,22 @@ const Main = () => {
         apiReference(apiUrls.topRatedMovies).then((data) => setTopRated(data))
     }, [])
 
+    useEffect(() => {
+        apiReference(apiUrls.preferredMovies, preference).then((data) => setUserRecommedations(data))
+    }, [preference])
+
     const imageBaseUrl = config ? config.images.base_url : null
+
+    const userRecommedationsResult = userRecommedations ? userRecommedations.results : null
+    const userRecommedationsMovies = userRecommedationsResult
+        ? userRecommedationsResult.map(movie => {
+            return {
+                ...movie,
+                backdrop_path: formatUrl(imageBaseUrl, movie.backdrop_path),
+                release_date: formatDate(movie.release_date)
+            }
+        })
+        : null
 
     const trendingResult = trending ? trending.results : null
     const trendingMovies = trendingResult
@@ -69,7 +87,7 @@ const Main = () => {
 
 
     const cards = [
-        { id: 0, title: "Recommended", apiResult: null },
+        { id: 0, title: "Recommended", apiResult: preference ? userRecommedationsMovies : null },
         { id: 1, title: "Trending", apiResult: trendingMovies },
         { id: 2, title: "Now Playing", apiResult: nowPlayingMovies },
         { id: 3, title: "Top Rated", apiResult: topRatedMovies },
@@ -80,6 +98,8 @@ const Main = () => {
             card.apiResult && <Card key={card.id} cardTitle={card.title} movieResult={card.apiResult} />
         )
     })
+
+
 
     return (
         <div className="Main">

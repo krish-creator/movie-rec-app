@@ -15,7 +15,8 @@ const Navbar = () => {
         setKeyWord(e.target.value)
     }
 
-    const handleSearch = () => {
+    const handleSearch = (e) => {
+        e.preventDefault()
         if (keyWord.trim() !== '') {
             navigate(`/search?query=${keyWord}`);
         }
@@ -45,10 +46,10 @@ const Navbar = () => {
                                 </ul>
                             </li>
                         </ul>
-                        <div className="d-flex" role="search">
+                        <form className="d-flex" role="search">
                             <input className="form-control me-2 search-input" onChange={(e) => handleChange(e)} type="search" placeholder="Search" aria-label="Search" />
                             <button className="btn" type="submit" onClick={handleSearch}><img src={searchIcon} alt="search-icon" className='search-btn' /></button>
-                        </div>
+                        </form>
                         <button type="button" className="btn" id='profile-btn' onClick={() => { navigate('/profile') }}>Profile</button>
                         {!auth.user && (
                             <>

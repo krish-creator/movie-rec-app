@@ -1,11 +1,11 @@
 import apiUrls from '../../api/utils/apiUrls.json'
 
-const apiReference = async (serviceUrl, currentPage, searchKey) => {
+const apiReference = async (serviceUrl, searchKey, currentPage) => {
 
     const baseUrl = apiUrls.baseUrl
-    const language = `language=en-US`
-    const pageUrl = `&page=${currentPage ? currentPage : 1}`
+    const language = searchKey ? `&language=en-US` : `language=en-US`
     const query = searchKey ? searchKey : ''
+    const pageUrl = `&page=${currentPage ? currentPage : 1}`
     const url = baseUrl + serviceUrl + query + language + pageUrl
 
     const options = {
@@ -15,6 +15,7 @@ const apiReference = async (serviceUrl, currentPage, searchKey) => {
             Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NmYwYTBiMDc4NTAzMzc3NjIxZDllNGFjMWM0ZjI3NyIsInN1YiI6IjY0N2JiNDA4OTM4MjhlMDBiZjllNzdiOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ICGHO7NSDS-xjL9CHNfM-Q-T65R8AD9OIJhZbra17Ok'
         }
     };
+
 
     try {
         const res = await fetch(url, options)

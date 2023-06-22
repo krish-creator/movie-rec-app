@@ -28,8 +28,8 @@ const Collection = (props) => {
     }, [])
 
     useEffect(() => {
-        apiReference(props.collectionUrl, pageNo, searchKey).then((data) => setCollection(data))
-    }, [props.collectionUrl, pageNo, searchKey])
+        apiReference(props.collectionUrl, searchKey, pageNo).then((data) => setCollection(data))
+    }, [props.collectionUrl, searchKey, pageNo])
 
     // const totalPages = collection ? collection.total_pages : null
     const imageBaseUrl = config ? config.images.base_url : null
