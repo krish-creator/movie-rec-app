@@ -15,84 +15,71 @@ import { useEffect, useState } from "react"
 
 const LazyMain = React.lazy(() => import('./components/mainComponent/Main'))
 
-
-
-
 const App = () => {
-  const auth = useAuth()
-  const [defaultGenres, setDefaultGenres] = useState([])
-  const [genres, setGenres] = useState([])
-  const [userDetails, setUserDetails] = useState({ name: '', preference: '' })
-  const [preference, setPreference] = useState('')
+
+  const auth = useAuth();
+  const [genres, setGenres] = useState([]);
+  const [userDetails, setUserDetails] = useState({ name: '', preference: '' });
+  const [preference, setPreference] = useState('');
+
+  const localGenres = localStorage.getItem("genres")
 
   useEffect(() => {
-    const currentGenres = localStorage.getItem("genres")
-    const parsedGenres = currentGenres ? JSON.parse(currentGenres) : null
-
-    if (parsedGenres) {
-      setGenres(parsedGenres)
+    if (!localGenres) {
+      apiReference(apiUrls.movieGenres)
+        .then((data) => {
+          const defaultGenresData = data.genres.map((genre) => ({
+            ...genre,
+            isSet: false
+          }));
+          setGenres(defaultGenresData);
+        })
+        .catch((error) => {
+          console.error('Error fetching movie genres:', error);
+        })
     } else {
-      setGenres(defaultGenres)
+      setGenres(JSON.parse(localGenres))
     }
-  }, [defaultGenres])
-
-  useEffect(() => {
-    apiReference(apiUrls.movieGenres)
-      .then((data) => {
-        const defaultGenresData = data.genres.map((genre) => ({
-          ...genre,
-          isSet: false
-        }))
-        setDefaultGenres(defaultGenresData)
-      })
-      .catch((error) => {
-        console.error('Error fetching movie genres:', error)
-      })
-  }, [])
-
-  useEffect(() => {
-    localStorage.setItem("genres", JSON.stringify(genres))
-  }, [genres])
+  }, [localGenres]);
 
   const handleChange = (e, genreName) => {
-    const { name, checked } = e.target
-    setGenres(prevGenres => {
-      return (
-        prevGenres.map(genre => {
+    const { name, checked } = e.target;
+    setGenres((prevGenres) => {
+      const updatedGenres = prevGenres.map((genre) => {
+        if (genre.name === genreName) {
           return {
             ...genre,
-            [name]: (genre.name === genreName ? checked : genre.isSet)
-          }
-        })
-      )
-    })
-  }
+            [name]: checked
+          };
+        }
+        return genre;
+      });
+      localStorage.setItem("genres", JSON.stringify(updatedGenres))
+      return updatedGenres;
+    });
+  };
 
   useEffect(() => {
     const newPreference = genres
-      .filter(genre => genre.isSet)
-      .map(genre => ({ id: genre.id, name: genre.name }))
+      .filter((genre) => genre.isSet)
+      .map((genre) => genre.id);
 
-    setPreference(newPreference)
+    setPreference(newPreference.join(','));
 
-  }, [genres])
+  }, [genres]);
 
   useEffect(() => {
-    setUserDetails(prevUserDetails => {
+    setUserDetails((prevUserDetails) => {
       return (
-        auth.user &&
-        {
+        auth.user && {
           ...prevUserDetails,
           name: auth.user,
           preference: preference
         }
-      )
-    })
-  }, [auth, preference])
+      );
+    });
+  }, [auth, preference]);
 
-  useEffect(() => {
-    console.log(defaultGenres, genres)
-  }, [defaultGenres, genres])
 
   return (
     <>
@@ -126,7 +113,7 @@ const App = () => {
           <Route path=':page' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
         </Route>
         <Route path='overview' element={<Overview overviewUrl={apiUrls.movieOverview} />} />
-        <Route path='profile' element={<RequireAuth><Profile genres={genres && defaultGenres} handleChange={handleChange} auth={auth} /></RequireAuth>} />
+        <Route path='profile' element={<RequireAuth><Profile genres={genres} handleChange={handleChange} auth={auth} /></RequireAuth>} />
         <Route path='*' element={<NoMatch />} />
       </Routes>
     </>
