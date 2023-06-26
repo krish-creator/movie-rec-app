@@ -1,4 +1,21 @@
 .overview{
     background-color: rgb(214, 168, 212) ;
-    height: 100vh;
+    height: calc(100vh - 76px);
+    padding: 40px;
+    display: flex;
+    gap: 100px;
+}
+
+.overview-text{
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+}
+
+.overview-poster {
+    height: 80%;
+}
+
+.overview-synopsis {
+    font-size: 1rem;
 }

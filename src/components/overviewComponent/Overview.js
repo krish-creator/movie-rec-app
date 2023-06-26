@@ -4,7 +4,8 @@ import apiUrls from '../../api/utils/apiUrls.json'
 import apiReference from '../../api/services/apiReference'
 import formatDate from '../../utils/formatDate'
 import formatUrl from '../../utils/fromatUrl'
-import { Container } from "reactstrap"
+
+import './Overview.css'
 
 const Overview = (props) => {
 
@@ -32,40 +33,42 @@ const Overview = (props) => {
     // const totalPages = overview ? overview.total_pages : null
     const imageBaseUrl = config ? config.images.base_url : null
 
+
     useEffect(() => {
-        setMovieInfo(
-            {
-                ...overview,
-                backdrop_path: overview ? formatUrl(imageBaseUrl, overview.backdrop_path) : {},
-                release_date: overview ? formatDate(overview.release_date) : {}
-            }
-        )
+        overview &&
+            setMovieInfo(
+                {
+                    ...overview,
+                    backdrop_path: formatUrl(imageBaseUrl, overview.backdrop_path),
+                    release_date: formatDate(overview.release_date)
+                }
+            )
     }, [imageBaseUrl, overview])
+
+    // useEffect(() => {
+    //     console.log(movieInfo.release_date);
+    // }, [movieInfo])
 
     return (
 
         <>
             {
-                movieInfo
-                &&
-                <Container fluid>
-                    <div className='overview'>
-                        Overview Movie ID : {movieId}
-                        <br />
-                        Movie Title : {movieInfo.original_title}
-                        <br />
-                        <br />
+                movieInfo &&
+                <div className='overview'>
+                    <img src={movieInfo.backdrop_path} alt="" className="img-fluid overview-poster" />
+                    <div className="overview-text" >
+                        <div className="overview-title">
+                            {movieInfo.original_title}
+                            <div>
+                                {movieInfo.release_date}
+                            </div>
+                        </div>
+
+                        <div className="overview-synopsis">
+                            {movieInfo.overview}
+                        </div>
                     </div>
-
-                    <img src={movieInfo.backdrop_path} alt="" />
-
-                    <div>
-                        <br />
-                        <br />
-                        JSON Data :   {JSON.stringify(movieInfo)}
-                    </div>
-
-                </Container>
+                </div>
             }
         </>
     )
