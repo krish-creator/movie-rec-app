@@ -1,3 +1,33 @@
 .movie-card{
     user-select: none ;
 }
+
+h5{
+  font-size: 16px;
+}
+
+p{
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    h5{
+      font-size: 14px;
+    }
+    
+    p {
+      font-size: 12px;
+    }
+
+  }
+  
+  @media (max-width: 480px) {
+    h5 {
+      font-size: 10px;
+    }
+
+    p {
+      font-size: 8px;
+    }
+
+  }

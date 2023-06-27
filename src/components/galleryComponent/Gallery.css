@@ -2,12 +2,41 @@
     width: 100%;
 }
 
+.card-main-title {
+  font-family: "Karla";
+  font-weight: 700;
+}
+
 .card-title{
     font-family: "Karla";
     font-weight: 700;
+    font-size: 16px;
 }
 
 .card-subtitle{
     font-family: "Karla";
     font-weight: 400;
+    font-size: 14px;
 }
+
+@media (max-width: 768px) {
+    .card-title{
+      font-size: 14px;
+    }
+    
+    .card-subtitle{
+      font-size: 12px;
+    }
+
+  }
+  
+  @media (max-width: 480px) {
+    .card-title{
+      font-size: 10px;
+    }
+
+    .card-subtitle{
+      font-size: 8px;
+    }
+
+  }

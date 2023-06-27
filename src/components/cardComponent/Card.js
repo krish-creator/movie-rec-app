@@ -20,8 +20,8 @@ const Card = (props) => {
                     <div className="card p-0 m-2 movie-card" onClick={() => handleOverview(movie.id)}>
                         <img src={movie.backdrop_path} className="card-img-top p-0" alt="card-poster" />
                         <div className="card-body">
-                            <h5 className="card-title fw-bold fs-6 fs-md-4">{movie.title}</h5>
-                            <p className="card-text fs-6 fs-md-4">{movie.release_date}</p>
+                            <h5 className="card-title">{movie.title}</h5>
+                            <p className="card-text">{movie.release_date}</p>
                         </div>
                     </div>
                 </SwiperSlide>
@@ -31,7 +31,7 @@ const Card = (props) => {
 
     return (
         <section className="container-fluid px-5">
-            <h1 className="display-5 py-3 card-title">{props.cardTitle}</h1>
+            <h1 className="display-5 py-3 card-main-title">{props.cardTitle}</h1>
             <div className="card-container">
                 <Swiper
                     loop={true}

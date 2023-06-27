@@ -13,13 +13,15 @@ const Gallery = (props) => {
 
     return (
         <Col sm="3" className="my-2">
-            <Card>
-                <CardImg top width="100%" src={props.imageUrl} alt="Card image cap" className='card-img' onClick={() => handleOverview(props.movieId)} />
-                <CardBody>
-                    <CardTitle className='card-title'>{props.cardTitle}</CardTitle>
-                    <CardSubtitle className='card-subtitle'>{props.cardSubtitle}</CardSubtitle>
-                </CardBody>
-            </Card>
+            <div className='container'>
+                <Card>
+                    <CardImg top src={props.imageUrl} alt="Card image cap" className='card-img' onClick={() => handleOverview(props.movieId)} />
+                    <CardBody>
+                        <CardTitle className='card-title'>{props.cardTitle}</CardTitle>
+                        <CardSubtitle className='card-subtitle'>{props.cardSubtitle}</CardSubtitle>
+                    </CardBody>
+                </Card>
+            </div>
         </Col>
     )
 }
