@@ -70,16 +70,18 @@ const App = () => {
 
   useEffect(() => {
     setUserDetails((prevUserDetails) => {
-      return (
+      const userDetails =
         auth.user && {
           ...prevUserDetails,
           name: auth.user,
-          preference: preference
-        }
-      );
-    });
-  }, [auth, preference]);
+          preference: preference,
+          generes: genres
 
+        };
+      localStorage.setItem("userDetails", JSON.stringify(userDetails))
+      return userDetails;
+    });
+  }, [auth, preference, genres]);
 
   return (
     <>
