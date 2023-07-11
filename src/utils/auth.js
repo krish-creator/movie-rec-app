@@ -1,15 +1,17 @@
 import { useState, useContext, createContext } from "react";
 
 import { initializeApp } from "firebase/app";
-import { getDatabase, push, ref } from "firebase/database";
+import { getDatabase, onValue, push, ref, update } from "firebase/database";
 
 const firebaseConfig = {
-    databaseURL: "https://movie-rec-app-8298c-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    databaseURL: "https://realtime-database-bf38b-default-rtdb.asia-southeast1.firebasedatabase.app/",
 };
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const userDetailsInDB = ref(database, "userDetails")
+
+
 
 const AuthContext = createContext(null)
 
@@ -19,8 +21,27 @@ export const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(currentUser || null)
 
+    const register = (user, password) => {
+        push(userDetailsInDB, { user, password })
+        // update()
+    }
+
+    onValue(userDetailsInDB, function (snapshot) {
+        let userDetailsArray = Object.values(snapshot.val())
+        console.log(snapshot.child);
+    })
+
+
     const login = (user) => {
-        setUser(user)
+        onValue(userDetailsInDB, function (snapshot) {
+            let userDetailsArray = Object.values(snapshot.val())
+            for (let i = 0; i < userDetailsArray.length; i++) {
+                if (userDetailsArray[i].name === currentUser) {
+                    console.log(userDetailsArray[i].name);
+                    setUser(user)
+                }
+            }
+        })
         localStorage.setItem("userName", JSON.stringify(user))
     }
 
@@ -35,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         logout,
+        register
     }
 
     return (

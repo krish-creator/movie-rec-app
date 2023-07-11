@@ -2,3 +2,10 @@
     background: linear-gradient(0.25turn,#e66465, #9198e5);
     height: 100vh;
 }
+
+.invalid-message {
+    background-color: white;
+    font-weight: 500;
+    border-radius: 10px;
+    text-align: center;
+}
