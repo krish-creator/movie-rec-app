@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
@@ -22,11 +22,7 @@ const Login = (props) => {
 
     const redirectPath = location.state?.path || '/'
 
-    // const handleLogin = (e, action) => {
-
-    // }
-
-    const handleSubmit = (e, action) => {
+    const handleSubmit = (e, action, genres) => {
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.preventDefault()
@@ -34,7 +30,7 @@ const Login = (props) => {
         } else {
             if (action === 'Login') {
                 auth.login(user)
-            } else {
+            } else if (action === 'Register') {
                 auth.register(user, password)
             }
             navigate(redirectPath, { replace: true })

@@ -58,8 +58,6 @@ const Profile = (props) => {
                     </Button>
                 </Col>
             </Row>
-
-
         </Container >
     )
 }
