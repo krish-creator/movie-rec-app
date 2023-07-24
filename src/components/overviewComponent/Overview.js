@@ -10,62 +10,56 @@ import './Overview.css'
 const Overview = (props) => {
 
     const params = useParams()
-    const pageNo = params.page ? params.page : '1'
-
     const [searchParams] = useSearchParams()
+
+    const [pageNo, setPageNo] = useState('1')
     const [movieId, setMovieId] = useState(null)
     const [config, setConfig] = useState(null)
     const [overview, setOverview] = useState(null)
-    const [movieInfo, setMovieInfo] = useState(null)
+
+    useEffect(() => {
+        setPageNo(params.page ? params.page : '1')
+    }, [params.page])
 
     useEffect(() => {
         setMovieId(searchParams.get('movieId'))
     }, [searchParams])
 
     useEffect(() => {
-        apiReference(apiUrls.config).then((data) => setConfig(data))
+        apiReference(apiUrls.config).then((data) => setConfig(data.images.base_url))
     }, [])
 
     useEffect(() => {
-        apiReference(props.overviewUrl, movieId, pageNo).then((data) => setOverview(data))
-    }, [props.overviewUrl, movieId, pageNo])
-
-    // const totalPages = overview ? overview.total_pages : null
-    const imageBaseUrl = config ? config.images.base_url : null
-
-
-    useEffect(() => {
-        overview &&
-            setMovieInfo(
+        apiReference(props.overviewUrl, movieId, pageNo).then((data) => {
+            setOverview(
                 {
-                    ...overview,
-                    backdrop_path: formatUrl(imageBaseUrl, overview.backdrop_path),
-                    release_date: formatDate(overview.release_date)
+                    ...data,
+                    backdrop_path: formatUrl(config, data.backdrop_path),
+                    release_date: formatDate(data.release_date)
                 }
             )
-    }, [imageBaseUrl, overview])
+        }
+        )
+    }, [props.overviewUrl, movieId, pageNo, config])
 
-    // useEffect(() => {
-    //     console.log(movieInfo.release_date);
-    // }, [movieInfo])
 
     return (
 
         <>
             {
-                movieInfo &&
+                overview.length > 0 &&
                 <div className='overview'>
-                    <img src={movieInfo.backdrop_path} alt="" className="img-fluid overview-poster" />
+                    <img src={overview.backdrop_path} alt="" className="img-fluid overview-poster" />
                     <div className="overview-text" >
                         <div className="overview-title">
-                            {movieInfo.original_title}
+                            {overview.original_title}
                             <div>
-                                {movieInfo.release_date}
+                                {overview.release_date}
                             </div>
                         </div>
 
                         <div className="overview-synopsis">
-                            {movieInfo.overview}
+                            {overview.overview}
                         </div>
                     </div>
                 </div>

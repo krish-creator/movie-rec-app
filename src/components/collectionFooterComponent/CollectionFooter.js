@@ -1,4 +1,6 @@
 
+import { useEffect } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 import './CollectionFooter.css'
@@ -7,11 +9,35 @@ import './CollectionFooter.css'
 
 const CollectionFooter = (props) => {
 
-    const totalPages = []
+    const { pageCount, currentPage } = props
+    const [totalPages, setTotalPages] = useState([])
+    const [lastPage, setLastPage] = useState('')
+    const [firstPage, setFirstPage] = useState('')
+    const [lastPageDisabled, setLastPageDisabled] = useState('')
+    const [firstPageDisabled, setFirstPageDisabled] = useState('')
 
-    for (let i = 1; i <= props.totalPages; i++) {
-        totalPages.push((i).toString())
-    }
+    useEffect(() => {
+        const newTotalPages = []
+        for (let i = 1; i <= pageCount; i++) {
+            newTotalPages.push((i).toString())
+        }
+
+        if (newTotalPages) { setTotalPages(newTotalPages) }
+        else { setTotalPages('1') }
+    }, [pageCount])
+
+
+    useEffect(() => {
+        setLastPage(totalPages[totalPages.length - 1])
+        setFirstPage(totalPages[0])
+        // eslint-disable-next-line 
+    }, [totalPages])
+
+    useEffect(() => {
+        setLastPageDisabled(currentPage === lastPage ? 'disabled' : {})
+        setFirstPageDisabled(currentPage === firstPage ? 'disabled' : {})
+        // eslint-disable-next-line 
+    }, [currentPage])
 
     const navLinkStyles = ({ isActive }) => {
         return {
@@ -21,27 +47,17 @@ const CollectionFooter = (props) => {
         }
     }
 
-    const pages = totalPages ? totalPages : '1'
+    const nextPage = (pageNo) => {
+        return currentPage === lastPage
+            ? lastPage
+            : (parseInt(pageNo) + 1).toString()
+    }
 
-    const paginationEl = pages && pages.map(page => {
-        return (
-            <PaginationItem key={page}>
-                <NavLink to={page} className='page-no' style={navLinkStyles}>
-                    <PaginationLink className='page-no active-page' id='page-btn'>
-                        {page}
-                    </PaginationLink>
-                </NavLink>
-
-            </PaginationItem >
-        )
-    })
-
-    const lastPage = pages[pages.length - 1]
-    const firstPage = pages[0]
-    const nextPage = (pageNo) => props.currentPage === lastPage ? lastPage : (parseInt(pageNo) + 1).toString()
-    const prevPage = (pageNo) => props.currentPage === firstPage ? firstPage : (parseInt(pageNo) - 1).toString()
-    const lastPageDisabled = props.currentPage === lastPage ? 'disabled' : {}
-    const firstPageDisabled = props.currentPage === firstPage ? 'disabled' : {}
+    const prevPage = (pageNo) => {
+        return currentPage === firstPage ?
+            firstPage
+            : (parseInt(pageNo) - 1).toString()
+    }
 
     return (
         <Pagination size='md' className="d-flex justify-content-center mb-3 " >
@@ -53,15 +69,28 @@ const CollectionFooter = (props) => {
             </PaginationItem>
 
             <PaginationItem>
-                <NavLink to={prevPage(props.currentPage)} className={`page-no ${firstPageDisabled}`}>
+                <NavLink to={prevPage(currentPage)} className={`page-no ${firstPageDisabled}`}>
                     <PaginationLink className='page-no' previous />
                 </NavLink>
             </PaginationItem>
 
-            {paginationEl}
+            {
+                totalPages.length > 0 && totalPages.map(page => {
+                    return (
+                        <PaginationItem key={page}>
+                            <NavLink to={page} className='page-no' style={navLinkStyles}>
+                                <PaginationLink className='page-no active-page' id='page-btn'>
+                                    {page}
+                                </PaginationLink>
+                            </NavLink>
+
+                        </PaginationItem >
+                    )
+                })
+            }
 
             <PaginationItem>
-                <NavLink to={nextPage(props.currentPage)} className={`page-no ${lastPageDisabled}`} >
+                <NavLink to={nextPage(currentPage)} className={`page-no ${lastPageDisabled}`} >
                     <PaginationLink className='page-no' next />
                 </NavLink>
             </PaginationItem>

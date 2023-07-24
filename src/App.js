@@ -1,6 +1,5 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-// import Main from './components/mainComponent/Main'
 import Login from './components/loginComponent/Login'
 import Navbar from './components/navbarComponent/Navbar'
 import NoMatch from './components/noMatchComponent/NoMatch'
@@ -8,8 +7,6 @@ import Collection from './components/collectionComponent/Collection'
 import apiUrls from './api/utils/apiUrls.json'
 import Overview from './components/overviewComponent/Overview'
 import Profile from './components/profileComponent/Profile'
-import { useAuth } from './utils/auth'
-import RequireAuth from './components/requireAuthComponent/RequireAuth'
 import apiReference from "../src/api/services/apiReference"
 import { useEffect, useState } from "react"
 
@@ -17,12 +14,17 @@ const LazyMain = React.lazy(() => import('./components/mainComponent/Main'))
 
 const App = () => {
 
-  const auth = useAuth();
-  const [genres, setGenres] = useState([]);
-  const [userDetails, setUserDetails] = useState({ name: '', preference: '' });
-  const [preference, setPreference] = useState('');
+  const [user, setUser] = useState(localStorage.getItem("userName"))
+  const [currentUser, setCurrentUser] = useState('')
+  const [genres, setGenres] = useState([])
+  const [userDetails, setUserDetails] = useState({ name: '', preference: '' })
+  const [preference, setPreference] = useState('')
+  const [localGenres, setLocalGenres] = useState('')
 
-  const localGenres = localStorage.getItem("genres")
+  useEffect(() => {
+    setCurrentUser(JSON.parse(localStorage.getItem("userName")))
+    setLocalGenres(JSON.parse(localStorage.getItem("genres")))
+  }, [])
 
   useEffect(() => {
     if (!localGenres) {
@@ -32,18 +34,22 @@ const App = () => {
             ...genre,
             isSet: false
           }));
+          setPreferences(defaultGenresData)
           setGenres(defaultGenresData);
         })
         .catch((error) => {
           console.error('Error fetching movie genres:', error);
         })
     } else {
-      setGenres(JSON.parse(localGenres))
+      const local_genres = JSON.parse(localGenres)
+      setPreferences(local_genres)
+      setGenres(local_genres)
     }
   }, [localGenres]);
 
   const handleChange = (e, genreName) => {
     const { name, checked } = e.target;
+
     setGenres((prevGenres) => {
       const updatedGenres = prevGenres.map((genre) => {
         if (genre.name === genreName) {
@@ -55,25 +61,26 @@ const App = () => {
         return genre;
       });
       localStorage.setItem("genres", JSON.stringify(updatedGenres))
+      setPreferences(updatedGenres)
       return updatedGenres;
     });
   };
 
-  useEffect(() => {
+  const setPreferences = (genres) => {
     const newPreference = genres
       .filter((genre) => genre.isSet)
       .map((genre) => genre.id);
 
     setPreference(newPreference.join(','));
 
-  }, [genres]);
+  }
 
   useEffect(() => {
     setUserDetails((prevUserDetails) => {
       const userDetails =
-        auth.user && {
+        user && {
           ...prevUserDetails,
-          name: auth.user,
+          name: user,
           preference: preference,
           generes: genres
 
@@ -81,18 +88,18 @@ const App = () => {
       localStorage.setItem("userDetails", JSON.stringify(userDetails))
       return userDetails;
     });
-  }, [auth, preference, genres]);
+  }, [preference, genres, user]);
 
   return (
     <>
-      <Navbar />
+      <Navbar user={user} />
       <Routes>
         <Route path='/' element={
           <React.Suspense fallback='Loading...'>
             <LazyMain preference={userDetails?.preference} />
           </React.Suspense>
         } />
-        <Route path='login' element={<Login btnLabel="Login" />} />
+        <Route path='login' element={<Login btnLabel="Login" currentUser={currentUser} user={user} setUser={setUser} />} />
         <Route path='register' element={<Login btnLabel="Register" />} />
         <Route path='popular' element={<Collection collectionUrl={apiUrls.popularMovies} />} >
           <Route index element={<Collection collectionUrl={apiUrls.popularMovies} />} />
@@ -115,7 +122,7 @@ const App = () => {
           <Route path=':page' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
         </Route>
         <Route path='overview' element={<Overview overviewUrl={apiUrls.movieOverview} />} />
-        <Route path='profile' element={<RequireAuth><Profile genres={genres} handleChange={handleChange} auth={auth} /></RequireAuth>} />
+        <Route path='profile' element={<Profile genres={genres} handleChange={handleChange} currentUser={currentUser} user={user} setUser={setUser} />} />
         <Route path='*' element={<NoMatch />} />
       </Routes>
     </>

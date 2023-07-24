@@ -4,9 +4,12 @@ import './Preference.css'
 
 
 const Preference = (props) => {
+
+    const { genresEl } = props
+
     return (
         <Row className="flex-column custom-check-group">
-            {props.genresEl}
+            {genresEl}
         </Row>
     )
 }

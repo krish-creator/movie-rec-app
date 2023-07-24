@@ -9,57 +9,65 @@ import CollectionFooter from "../collectionFooterComponent/CollectionFooter"
 import { useParams, useSearchParams } from "react-router-dom"
 
 
-const Collection = (props) => {
+const Collection = ({ collectionUrl }) => {
 
     const params = useParams()
-    const pageNo = params.page ? params.page : '1'
-
     const [searchParams] = useSearchParams()
+
+    const [pageNo, setPageNo] = useState('1')
     const [config, setConfig] = useState(null)
-    const [collection, setCollection] = useState(null)
+    const [collection, setCollection] = useState([])
     const [searchKey, setSearchKey] = useState(null)
+
+    useEffect(() => {
+        setPageNo(params.page ? params.page : '1')
+    }, [params.page])
 
     useEffect(() => {
         setSearchKey(searchParams.get('query'))
     }, [searchParams])
 
     useEffect(() => {
-        apiReference(apiUrls.config).then((data) => setConfig(data))
+        apiReference(apiUrls.config).then((data) => setConfig(data.images.base_url))
     }, [])
 
     useEffect(() => {
-        apiReference(props.collectionUrl, searchKey, pageNo).then((data) => setCollection(data))
-    }, [props.collectionUrl, searchKey, pageNo])
-
-    // const totalPages = collection ? collection.total_pages : null
-    const imageBaseUrl = config ? config.images.base_url : null
-    const collectionResult = collection ? collection.results : null
-    const collectionMovies = collectionResult
-        ? collectionResult.map(movie => {
-            return {
-                ...movie,
-                backdrop_path: formatUrl(imageBaseUrl, movie.backdrop_path),
-                release_date: formatDate(movie.release_date)
-            }
+        apiReference(collectionUrl, searchKey, pageNo).then((data) => {
+            const collectionMovies = data.results
+                ? data.results.map(movie => {
+                    return {
+                        ...movie,
+                        backdrop_path: formatUrl(config, movie.backdrop_path),
+                        release_date: formatDate(movie.release_date)
+                    }
+                })
+                : null
+            setCollection(collectionMovies)
         })
-        : null
+    }, [collectionUrl, searchKey, pageNo, config])
 
-    const galleryEl = collectionMovies
-        ? collectionMovies.map(card => {
-            return (
-                card && <Gallery key={card.id} movieId={card.id} imageUrl={card.backdrop_path} cardTitle={card.title} cardSubtitle={card.release_date} />
-            )
-        })
-        : null
+
 
     return (
         <>
             <Container fluid className="my-5">
                 <Row>
-                    {galleryEl}
+                    {collection.length > 0 && collection.map(card => {
+                        return (
+                            card &&
+                            <Gallery
+                                key={card.id}
+                                movieId={card.id}
+                                imageUrl={card.backdrop_path}
+                                cardTitle={card.title}
+                                cardSubtitle={card.release_date}
+                            />
+                        )
+                    })
+                    }
                 </Row>
             </Container>
-            <CollectionFooter totalPages="5" currentPage={pageNo} />
+            <CollectionFooter pageCount="5" currentPage={pageNo} />
         </>
 
 
