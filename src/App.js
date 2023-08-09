@@ -9,6 +9,8 @@ import Overview from './components/overviewComponent/Overview'
 import Profile from './components/profileComponent/Profile'
 import apiReference from "../src/api/services/apiReference"
 import { useEffect, useState } from "react"
+import { userDetailsInDB } from './utils/auth'
+import { onValue } from "firebase/database";
 
 const LazyMain = React.lazy(() => import('./components/mainComponent/Main'))
 
@@ -20,9 +22,19 @@ const App = () => {
   const [userDetails, setUserDetails] = useState({ name: '', preference: '' })
   const [preference, setPreference] = useState('')
   const [localGenres, setLocalGenres] = useState('')
+  const [userDetailsArray, setUserDetailsArray] = useState('')
+
 
   useEffect(() => {
-    setCurrentUser(JSON.parse(localStorage.getItem("userName")))
+    onValue(userDetailsInDB, function (snapshot) {
+      let obj = snapshot.val()
+      let result = Object.keys(obj).map((key) => [key, obj[key]])
+      setUserDetailsArray(result)
+    })
+  }, [])
+
+  useEffect(() => {
+    setCurrentUser(JSON.parse(localStorage.getItem("userDetails")))
     setLocalGenres(JSON.parse(localStorage.getItem("genres")))
   }, [])
 
@@ -99,8 +111,8 @@ const App = () => {
             <LazyMain preference={userDetails?.preference} />
           </React.Suspense>
         } />
-        <Route path='login' element={<Login btnLabel="Login" currentUser={currentUser} user={user} setUser={setUser} />} />
-        <Route path='register' element={<Login btnLabel="Register" />} />
+        <Route path='login' element={<Login btnLabel="Login" currentUser={currentUser} setCurrentUser={setCurrentUser} user={user} setUser={setUser} userDetailsArray={userDetailsArray} />} />
+        <Route path='register' element={<Login btnLabel="Register" user={user} setUser={setUser} />} />
         <Route path='popular' element={<Collection collectionUrl={apiUrls.popularMovies} />} >
           <Route index element={<Collection collectionUrl={apiUrls.popularMovies} />} />
           <Route path=':page' element={<Collection collectionUrl={apiUrls.popularMovies} />} />
@@ -122,7 +134,7 @@ const App = () => {
           <Route path=':page' element={<Collection collectionUrl={apiUrls.topRatedMovies} />} />
         </Route>
         <Route path='overview' element={<Overview overviewUrl={apiUrls.movieOverview} />} />
-        <Route path='profile' element={<Profile genres={genres} handleChange={handleChange} currentUser={currentUser} user={user} setUser={setUser} />} />
+        <Route path='profile' element={<Profile genres={genres} handleChange={handleChange} currentUser={currentUser} setCurrentUser={setCurrentUser} user={user} setUser={setUser} userDetailsArray={userDetailsArray} setUserDetailsArray={setUserDetailsArray} />} />
         <Route path='*' element={<NoMatch />} />
       </Routes>
     </>

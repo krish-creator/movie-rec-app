@@ -4,12 +4,12 @@ import Preference from "../preferenceComponent/Preference"
 import './Profile.css'
 
 import { userDetailsInDB } from '../../utils/auth'
-import { onValue, update } from "firebase/database";
+import { update } from "firebase/database";
 import { useState, useEffect } from "react"
 
 const Profile = (props) => {
 
-    const { handleChange, currentUser, setUser, genres, user } = props
+    const { handleChange, currentUser, setUser, genres, user, userDetailsArray, setCurrentUser } = props
 
     const navigate = useNavigate()
     const [genresEl, setGenresEl] = useState([])
@@ -27,17 +27,17 @@ const Profile = (props) => {
     }
 
     const logout = () => {
-        onValue(userDetailsInDB, function (snapshot) {
-            let userDetailsArray = Object.values(snapshot.val())
-            for (let i = 0; i < userDetailsArray.length; i++) {
-                if (userDetailsArray[i].name === currentUser) {
-                    update(userDetailsInDB, JSON.parse(localStorage.getItem("userDetails")))
-                }
+
+        for (let i = 0; i < userDetailsArray.length; i++) {
+            if (userDetailsArray[i][1].name === currentUser) {
+                setCurrentUser(userDetailsArray[i])
+                console.log(userDetailsArray);
+                update(userDetailsInDB, userDetailsArray[i])
             }
-            setUser(null)
-            localStorage.removeItem("userName")
-            localStorage.removeItem("genres")
-        })
+        }
+        setUser(null)
+        localStorage.removeItem("userName")
+        localStorage.removeItem("genres")
     }
 
 

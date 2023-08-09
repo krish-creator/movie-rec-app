@@ -8,43 +8,33 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './Login.css'
-import { useNavigate, useLocation } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { userDetailsInDB } from '../../utils/auth'
-import { onValue, push } from "firebase/database";
-import { useEffect } from 'react';
-
-
+import { push } from "firebase/database";
 
 const Login = (props) => {
 
-    const { btnLabel, currentUser, user, setUser } = props
+    const { btnLabel, currentUser, setCurrentUser, user, setUser, userDetailsArray } = props
 
     const [password, setPassword] = useState('')
     const [validated, setValidated] = useState(false)
-    const [redirectPath, setRedirectPath] = useState('')
+
     const navigate = useNavigate()
-    const location = useLocation()
-
-    useEffect(() => {
-        setRedirectPath(location.state?.path || '/')
-    }, [location])
-
 
     const login = (user) => {
-        onValue(userDetailsInDB, function (snapshot) {
-            let userDetailsArray = Object.values(snapshot.val())
-            for (let i = 0; i < userDetailsArray.length; i++) {
-                if (userDetailsArray[i].name === currentUser) {
-                    setUser(user)
-                }
+        for (let i = 0; i < userDetailsArray.length; i++) {
+            if (userDetailsArray[i][1].name === currentUser.name) {
+                setUser(user)
+                setCurrentUser(userDetailsArray[i])
             }
-            localStorage.setItem("userName", JSON.stringify(user))
-        })
+        }
+        localStorage.setItem("userName", JSON.stringify(user))
     }
 
     const register = (name, password) => {
         push(userDetailsInDB, { name, password })
+        setUser(null)
+        setPassword(null)
     }
 
 
@@ -59,7 +49,7 @@ const Login = (props) => {
             } else if (action === 'Register') {
                 register(user, password)
             }
-            navigate(redirectPath, { replace: true })
+            navigate('/', { replace: true })
         }
         setValidated(true)
     }
