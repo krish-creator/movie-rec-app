@@ -28,7 +28,7 @@ const App = () => {
   useEffect(() => {
     onValue(userDetailsInDB, function (snapshot) {
       let obj = snapshot.val()
-      let result = Object.keys(obj).map((key) => [key, obj[key]])
+      let result = obj && Object.keys(obj).map((key) => [key, obj[key]])
       setUserDetailsArray(result)
     })
   }, [])
@@ -82,9 +82,9 @@ const App = () => {
     const newPreference = genres
       .filter((genre) => genre.isSet)
       .map((genre) => genre.id);
-
-    setPreference(newPreference.join(','));
-
+    const updatedPreference = newPreference.join(',')
+    setPreference(updatedPreference);
+    localStorage.setItem("preference", JSON.stringify(updatedPreference))
   }
 
   useEffect(() => {
@@ -95,8 +95,8 @@ const App = () => {
           name: user,
           preference: preference,
           generes: genres
-
         };
+
       localStorage.setItem("userDetails", JSON.stringify(userDetails))
       return userDetails;
     });

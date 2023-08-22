@@ -37,20 +37,19 @@ const Card = (props) => {
                 >
                     {
                         movieResult.length > 0
-                            ? movieResult.map(movie => {
-                                return (
-                                    <SwiperSlide key={movie.id} id={movie.id}>
-                                        <div className="card p-0 m-2 movie-card" onClick={() => handleOverview(movie.id)}>
-                                            <img src={movie.backdrop_path} className="card-img-top p-0" alt="card-poster" />
-                                            <div className="card-body">
-                                                <h5 className="card-title">{movie.title}</h5>
-                                                <p className="card-text">{movie.release_date}</p>
-                                            </div>
+                        && movieResult.map(movie => {
+                            return (
+                                <SwiperSlide key={movie.id} id={movie.id}>
+                                    <div className="card p-0 m-2 movie-card" onClick={() => handleOverview(movie.id)}>
+                                        <img src={movie.backdrop_path} className="card-img-top p-0" alt="card-poster" />
+                                        <div className="card-body">
+                                            <h5 className="card-title">{movie.title}</h5>
+                                            <p className="card-text">{movie.release_date}</p>
                                         </div>
-                                    </SwiperSlide>
-                                )
-                            })
-                            : null
+                                    </div>
+                                </SwiperSlide>
+                            )
+                        })
                     }
                 </Swiper>
             </div >

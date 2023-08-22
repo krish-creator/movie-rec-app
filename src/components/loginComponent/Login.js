@@ -29,10 +29,11 @@ const Login = (props) => {
             }
         }
         localStorage.setItem("userName", JSON.stringify(user))
+        localStorage.setItem("userDetails", JSON.stringify(currentUser))
     }
 
-    const register = (name, password) => {
-        push(userDetailsInDB, { name, password })
+    const register = (name, password, genres = [], preference = '') => {
+        push(userDetailsInDB, { name, password, genres, preference })
         setUser(null)
         setPassword(null)
     }

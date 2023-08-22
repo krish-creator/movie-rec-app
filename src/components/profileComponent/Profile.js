@@ -3,8 +3,8 @@ import { Container, Button, Row, Col } from "reactstrap"
 import Preference from "../preferenceComponent/Preference"
 import './Profile.css'
 
-import { userDetailsInDB } from '../../utils/auth'
-import { update } from "firebase/database";
+import { userDetailsInDB, database } from '../../utils/auth'
+import { update, ref } from "firebase/database";
 import { useState, useEffect } from "react"
 
 const Profile = (props) => {
@@ -27,19 +27,24 @@ const Profile = (props) => {
     }
 
     const logout = () => {
-
-        for (let i = 0; i < userDetailsArray.length; i++) {
-            if (userDetailsArray[i][1].name === currentUser) {
-                setCurrentUser(userDetailsArray[i])
-                console.log(userDetailsArray);
-                update(userDetailsInDB, userDetailsArray[i])
-            }
-        }
+        updateRealTime()
         setUser(null)
         localStorage.removeItem("userName")
         localStorage.removeItem("genres")
+        localStorage.removeItem("preference")
     }
 
+    const updateRealTime = () => {
+        const updates = {}
+        for (let i = 0; i < userDetailsArray.length; i++) {
+            if (userDetailsArray[i][1].name === currentUser.name) {
+                setCurrentUser(userDetailsArray[i])
+                updates['/userDetails/' + userDetailsArray[i][0] + '/preference/'] = JSON.parse(localStorage.getItem("preference"))
+                updates['/userDetails/' + userDetailsArray[i][0] + '/genres/'] = JSON.parse(localStorage.getItem("genres"))
+            }
+        }
+        return update(ref(database), updates);
+    }
 
     useEffect(() => {
         setGenresEl(genres
@@ -66,6 +71,11 @@ const Profile = (props) => {
         )
         // eslint-disable-next-line 
     }, [genres])
+
+    useEffect(() => {
+        console.log(userDetailsInDB, userDetailsArray, JSON.parse(localStorage.getItem("preference")))
+
+    }, [])
 
 
     return (

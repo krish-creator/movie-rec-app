@@ -15,7 +15,7 @@ const Overview = (props) => {
     const [pageNo, setPageNo] = useState('1')
     const [movieId, setMovieId] = useState(null)
     const [config, setConfig] = useState(null)
-    const [overview, setOverview] = useState(null)
+    const [overview, setOverview] = useState([])
 
     useEffect(() => {
         setPageNo(params.page ? params.page : '1')
@@ -42,12 +42,9 @@ const Overview = (props) => {
         )
     }, [props.overviewUrl, movieId, pageNo, config])
 
-
     return (
-
         <>
             {
-                overview.length > 0 &&
                 <div className='overview'>
                     <img src={overview.backdrop_path} alt="" className="img-fluid overview-poster" />
                     <div className="overview-text" >
@@ -57,7 +54,6 @@ const Overview = (props) => {
                                 {overview.release_date}
                             </div>
                         </div>
-
                         <div className="overview-synopsis">
                             {overview.overview}
                         </div>
