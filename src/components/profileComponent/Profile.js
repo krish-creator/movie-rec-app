@@ -37,13 +37,19 @@ const Profile = (props) => {
     const updateRealTime = () => {
         const updates = {}
         for (let i = 0; i < userDetailsArray.length; i++) {
+            console.log(userDetailsArray[i][1].name, currentUser[1].name);
+
             if (userDetailsArray[i][1].name === currentUser.name) {
-                setCurrentUser(userDetailsArray[i])
-                updates['/userDetails/' + userDetailsArray[i][0] + '/preference/'] = JSON.parse(localStorage.getItem("preference"))
-                updates['/userDetails/' + userDetailsArray[i][0] + '/genres/'] = JSON.parse(localStorage.getItem("genres"))
+                setCurrentUser(userDetailsArray[i]);
+                updates['/userDetails/' + userDetailsArray[i][0] + '/preference/'] = JSON.parse(localStorage.getItem("preference"));
+                updates['/userDetails/' + userDetailsArray[i][0] + '/genres/'] = JSON.parse(localStorage.getItem("genres"));
             }
         }
+
+
+
         return update(ref(database), updates);
+
     }
 
     useEffect(() => {
@@ -72,10 +78,10 @@ const Profile = (props) => {
         // eslint-disable-next-line 
     }, [genres])
 
-    useEffect(() => {
-        console.log(userDetailsInDB, userDetailsArray, JSON.parse(localStorage.getItem("preference")))
+    // useEffect(() => {
+    //     console.log(userDetailsInDB, userDetailsArray, JSON.parse(localStorage.getItem("preference")))
 
-    }, [])
+    // }, [])
 
 
     return (

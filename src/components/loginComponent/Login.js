@@ -25,11 +25,11 @@ const Login = (props) => {
         for (let i = 0; i < userDetailsArray.length; i++) {
             if (userDetailsArray[i][1].name === currentUser.name) {
                 setUser(user)
-                setCurrentUser(userDetailsArray[i])
+                setCurrentUser(userDetailsArray[i][1])
             }
         }
         localStorage.setItem("userName", JSON.stringify(user))
-        localStorage.setItem("userDetails", JSON.stringify(currentUser))
+        localStorage.setItem("userDetails", JSON.stringify(currentUser[1]))
     }
 
     const register = (name, password, genres = [], preference = '') => {
@@ -40,12 +40,14 @@ const Login = (props) => {
 
 
     const handleSubmit = (e, action) => {
+
         const form = e.currentTarget
         if (form.checkValidity() === false) {
             e.preventDefault()
             e.stopPropagation()
         } else {
             if (action === 'Login') {
+                e.preventDefault()
                 login(user)
             } else if (action === 'Register') {
                 register(user, password)
